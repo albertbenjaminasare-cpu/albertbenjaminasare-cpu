@@ -28,7 +28,13 @@ import {
   Wind,
   Droplets,
   Download,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Mic,
+  MicOff,
+  Square,
+  Play,
+  Pause,
+  Radio
 } from "lucide-react";
 import { AgriVisionAnalysis, ScanLogItem } from "../types";
 import { FarmSite, FARM_SITES } from "../data/farmSites";
@@ -170,6 +176,92 @@ export const AgriVisionApp: React.FC<AgriVisionAppProps> = ({
   const [mp3Time, setMp3Time] = useState<number>(0);
   const [mp3Duration, setMp3Duration] = useState<number>(0);
   const [mp3Rate, setMp3Rate] = useState<number>(0.9);
+
+  // Live Microphone Audio Voice Recorder State
+  const [isRecordingMic, setIsRecordingMic] = useState<boolean>(false);
+  const [recordingSeconds, setRecordingSeconds] = useState<number>(0);
+  const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null);
+  const [recordedSpeechTranscript, setRecordedSpeechTranscript] = useState<string>("");
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const recordingTimerRef = useRef<any>(null);
+  const speechRecognitionRef = useRef<any>(null);
+
+  const startVoiceRecording = async () => {
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert("Microphone recording is not supported on this browser context. You can use speech recognition or text entry.");
+        return;
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        setRecordedAudioUrl(audioUrl);
+      };
+
+      mediaRecorder.start(200);
+      setIsRecordingMic(true);
+      setRecordingSeconds(0);
+      setRecordedAudioUrl(null);
+
+      recordingTimerRef.current = setInterval(() => {
+        setRecordingSeconds((prev) => prev + 1);
+      }, 1000);
+
+      // Web Speech Recognition for live speech-to-text transcription
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        try {
+          const recognition = new SpeechRecognition();
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.lang = selectedLang === "fr" ? "fr-FR" : "en-GH";
+          recognition.onresult = (event: any) => {
+            let transcript = "";
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              transcript += event.results[i][0].transcript;
+            }
+            if (transcript.trim()) {
+              setRecordedSpeechTranscript(transcript);
+              setInputMessage(transcript);
+            }
+          };
+          recognition.start();
+          speechRecognitionRef.current = recognition;
+        } catch (e) {
+          console.warn("Speech recognition notice:", e);
+        }
+      }
+    } catch (err: any) {
+      console.error("Microphone recording error:", err);
+      alert("Please allow microphone access in your browser to record your spoken voice query.");
+    }
+  };
+
+  const stopVoiceRecording = () => {
+    if (mediaRecorderRef.current && isRecordingMic) {
+      mediaRecorderRef.current.stop();
+      mediaRecorderRef.current.stream.getTracks().forEach((track) => track.stop());
+    }
+    if (speechRecognitionRef.current) {
+      try { speechRecognitionRef.current.stop(); } catch (e) {}
+    }
+    if (recordingTimerRef.current) {
+      clearInterval(recordingTimerRef.current);
+    }
+    setIsRecordingMic(false);
+  };
 
   // Read Aloud Treatment Advice handler with en-NG West African accent setting
   const handleReadAloudTreatment = (customText?: string) => {
@@ -1607,7 +1699,29 @@ export const AgriVisionApp: React.FC<AgriVisionAppProps> = ({
                     : "bg-slate-900 border border-slate-800 text-slate-200"
                 }`}>
                   <p>{msg.text}</p>
-                  <span className="text-[9px] text-slate-500 mt-2 block text-right font-mono">{msg.timestamp}</span>
+                  
+                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-800/80">
+                    <span className="text-[9px] text-slate-500 font-mono">{msg.timestamp}</span>
+                    
+                    {msg.sender === "bot" && (
+                      <button
+                        onClick={() => {
+                          if ('speechSynthesis' in window) {
+                            window.speechSynthesis.cancel();
+                            const u = new SpeechSynthesisUtterance(msg.text);
+                            u.rate = 0.9;
+                            u.lang = selectedLang === "fr" ? "fr-FR" : "en-GH";
+                            window.speechSynthesis.speak(u);
+                          }
+                        }}
+                        className="text-[10px] text-emerald-400 hover:text-emerald-300 font-semibold flex items-center space-x-1 bg-emerald-500/10 hover:bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/20 transition-all"
+                        title="Listen to this spoken agronomist answer"
+                      >
+                        <Volume2 className="w-3 h-3" />
+                        <span>Listen Voice</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -1620,16 +1734,99 @@ export const AgriVisionApp: React.FC<AgriVisionAppProps> = ({
             )}
           </div>
 
+          {/* Active Voice Microphone Recording Bar */}
+          {isRecordingMic && (
+            <div className="p-4 rounded-2xl bg-rose-950/80 border border-rose-500/50 flex flex-col sm:flex-row items-center justify-between gap-3 animate-pulse">
+              <div className="flex items-center space-x-3">
+                <span className="w-3 h-3 rounded-full bg-rose-500 animate-ping" />
+                <div>
+                  <span className="text-xs font-bold text-white block">Recording Farmer Voice Query...</span>
+                  <span className="text-[10px] font-mono text-rose-300">
+                    Duration: 00:{recordingSeconds < 10 ? `0${recordingSeconds}` : recordingSeconds}s • Speak clearly in Twi, Fante, Hausa, or English
+                  </span>
+                </div>
+              </div>
+
+              {/* Animated Waveform Visualizer */}
+              <div className="flex items-center space-x-1 h-6">
+                {[40, 80, 60, 100, 70, 90, 50, 85, 65, 95].map((h, i) => (
+                  <div
+                    key={i}
+                    className="w-1 bg-rose-400 rounded-full animate-bounce"
+                    style={{ height: `${h}%`, animationDelay: `${i * 0.1}s` }}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={stopVoiceRecording}
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center space-x-1.5 shadow-md transition-all"
+              >
+                <Square className="w-3.5 h-3.5 fill-current" />
+                <span>Stop Recording</span>
+              </button>
+            </div>
+          )}
+
+          {/* Recorded Audio Preview Box */}
+          {recordedAudioUrl && !isRecordingMic && (
+            <div className="p-3.5 rounded-2xl bg-slate-950 border border-emerald-500/40 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="flex items-center space-x-3">
+                <Volume2 className="w-5 h-5 text-emerald-400" />
+                <div>
+                  <span className="text-xs font-bold text-white block">Recorded Voice Note Preview</span>
+                  <audio src={recordedAudioUrl} controls className="h-7 w-48 sm:w-64 mt-1" />
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => {
+                    if (inputMessage.trim() || recordedSpeechTranscript.trim()) {
+                      handleSendMessage(inputMessage || recordedSpeechTranscript);
+                    } else {
+                      handleSendMessage("Audio voice query submitted: Please assist with my field conditions.");
+                    }
+                    setRecordedAudioUrl(null);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center space-x-1.5 shadow-md"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Send Voice Query</span>
+                </button>
+                <button
+                  onClick={() => setRecordedAudioUrl(null)}
+                  className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold"
+                >
+                  Discard
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Chat Input Box */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <button
+              onClick={isRecordingMic ? stopVoiceRecording : startVoiceRecording}
+              className={`p-3 rounded-2xl border transition-all shrink-0 ${
+                isRecordingMic
+                  ? "bg-rose-600 border-rose-500 text-white animate-pulse"
+                  : "bg-slate-950 border-slate-800 text-emerald-400 hover:border-emerald-500/60 hover:bg-slate-900"
+              }`}
+              title={isRecordingMic ? "Stop voice recording" : "Record spoken audio voice note"}
+            >
+              {isRecordingMic ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            </button>
+
             <input
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-              placeholder="Ask your AI Agronomist a question..."
+              placeholder="Ask your AI Agronomist or tap mic to speak..."
               className="flex-1 bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500/60"
             />
+
             <button
               onClick={() => handleSendMessage()}
               disabled={isSendingChat || !inputMessage.trim()}
