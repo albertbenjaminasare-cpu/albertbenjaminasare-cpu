@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { SlideItem } from "../types";
-import { Sparkles, Copy, Check, Presentation, ChevronLeft, ChevronRight, Eye, RefreshCw } from "lucide-react";
+import { Sparkles, Copy, Check, Presentation, ChevronLeft, ChevronRight, Eye, RefreshCw, FileText, FileCheck } from "lucide-react";
+import { exportPitchDeckPDFReport } from "../utils/pdfExport";
+import { exportPitchDeckDocxReport } from "../utils/docxExport";
 
 export const PitchDeckGenerator: React.FC = () => {
   const [title, setTitle] = useState("OmniGuard: Real-Time Deepfake Defense");
@@ -198,8 +200,28 @@ export const PitchDeckGenerator: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex items-center space-x-2 text-xs font-semibold text-slate-400">
-            <span>Slide {activeSlideIndex + 1} of {slides.length}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => exportPitchDeckPDFReport(title, description, track, slides)}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer shrink-0"
+              title="Export complete pitch deck as PDF report with live project link"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>PDF Deck</span>
+            </button>
+
+            <button
+              onClick={() => exportPitchDeckDocxReport(title, description, track, slides)}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all cursor-pointer shrink-0"
+              title="Export complete pitch deck as Microsoft Word (.docx) document with live project link"
+            >
+              <FileCheck className="w-3.5 h-3.5" />
+              <span>Word (.docx)</span>
+            </button>
+
+            <span className="text-xs font-semibold text-slate-400 hidden sm:inline">
+              Slide {activeSlideIndex + 1} of {slides.length}
+            </span>
           </div>
         </div>
 

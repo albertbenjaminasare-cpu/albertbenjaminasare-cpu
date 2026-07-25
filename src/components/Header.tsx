@@ -6,6 +6,8 @@ import {
   CloudRain,
   Calculator,
   FileSpreadsheet,
+  FileText,
+  FileCheck,
   MapPin,
   Thermometer,
   Zap,
@@ -16,6 +18,8 @@ import {
   Check
 } from "lucide-react";
 import { FarmSite, FARM_SITES } from "../data/farmSites";
+import { exportAgriVisionPDFReport } from "../utils/pdfExport";
+import { exportAgriVisionDocxReport } from "../utils/docxExport";
 
 interface HeaderProps {
   activeTab: string;
@@ -198,6 +202,27 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="hidden lg:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 font-mono">
               <Zap className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
               <span>Gemma 4 Multimodal</span>
+            </div>
+
+            {/* Export PDF & Word Report Buttons */}
+            <div className="flex items-center space-x-1.5 shrink-0">
+              <button
+                onClick={() => exportAgriVisionPDFReport({ selectedSite })}
+                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer"
+                title="Download PDF report containing clickable live project URL"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>PDF Report</span>
+              </button>
+
+              <button
+                onClick={() => exportAgriVisionDocxReport({ selectedSite })}
+                className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all cursor-pointer"
+                title="Download Microsoft Word (.docx) document containing clickable live project URL"
+              >
+                <FileCheck className="w-3.5 h-3.5" />
+                <span>Word (.docx)</span>
+              </button>
             </div>
           </div>
         </div>
