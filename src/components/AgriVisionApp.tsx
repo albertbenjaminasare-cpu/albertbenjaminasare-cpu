@@ -23,8 +23,6 @@ import {
   Bot,
   Calculator,
   FileSpreadsheet,
-  FileText,
-  FileCheck,
   Layers,
   Thermometer,
   Wind,
@@ -40,8 +38,6 @@ import {
 } from "lucide-react";
 import { AgriVisionAnalysis, ScanLogItem } from "../types";
 import { FarmSite, FARM_SITES } from "../data/farmSites";
-import { exportAgriVisionPDFReport } from "../utils/pdfExport";
-import { exportAgriVisionDocxReport } from "../utils/docxExport";
 
 // Preset Leaf Pathology Graphics Data URIs (Instant & 100% Reliable)
 const TOMATO_BLIGHT_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" fill="%230f172a"/><circle cx="400" cy="300" r="280" fill="%231e293b" opacity="0.6"/><path d="M400 550 Q 395 350 380 50" stroke="%2322c55e" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M380 320 C 220 260 120 180 180 80 C 260 100 320 200 380 320 Z" fill="%2315803d" stroke="%23166534" stroke-width="4"/><path d="M380 340 C 540 280 640 200 580 100 C 500 120 440 220 380 340 Z" fill="%2316a34a" stroke="%2315803d" stroke-width="4"/><path d="M380 180 C 320 80 360 20 400 20 C 440 20 480 80 380 180 Z" fill="%2322c55e" stroke="%2316a34a" stroke-width="4"/><path d="M380 320 Q 280 220 200 140 M380 340 Q 480 240 560 160 M380 180 L 400 40" stroke="%2386efac" stroke-width="3" fill="none" opacity="0.6"/><ellipse cx="260" cy="180" rx="45" ry="32" fill="%23292524" stroke="%23eab308" stroke-width="4"/><ellipse cx="260" cy="180" rx="30" ry="20" fill="%231c1917"/><ellipse cx="500" cy="220" rx="55" ry="40" fill="%23292524" stroke="%23eab308" stroke-width="5"/><ellipse cx="500" cy="220" rx="40" ry="25" fill="%2309090b"/><circle cx="480" cy="200" r="12" fill="%2344403c"/><ellipse cx="380" cy="100" rx="25" ry="18" fill="%23292524" stroke="%23ca8a04" stroke-width="3"/><text x="40" y="550" fill="%23f87171" font-family="sans-serif" font-size="22" font-weight="bold">PATHOLOGY SCAN: Tomato Late Blight (Phytophthora infestans)</text></svg>`;
@@ -1301,26 +1297,6 @@ export const AgriVisionApp: React.FC<AgriVisionAppProps> = ({
                       <span className="text-[10px] uppercase block opacity-70">Area Affected</span>
                       <span className="text-lg font-extrabold">{analysisResult.affectedAreaPercent}%</span>
                     </div>
-
-                    <div className="flex flex-wrap items-center gap-2">
-                      <button
-                        onClick={() => exportAgriVisionPDFReport({ analysis: analysisResult, selectedSite, selectedVoice, selectedLang })}
-                        className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition-all shrink-0 cursor-pointer"
-                        title="Download complete PDF pathology report with clickable project URL"
-                      >
-                        <FileText className="w-4 h-4" />
-                        <span>PDF Report</span>
-                      </button>
-
-                      <button
-                        onClick={() => exportAgriVisionDocxReport({ analysis: analysisResult, selectedSite, selectedVoice, selectedLang })}
-                        className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all shrink-0 cursor-pointer"
-                        title="Download Microsoft Word (.docx) document with clickable project URL"
-                      >
-                        <FileCheck className="w-4 h-4" />
-                        <span>Word (.docx)</span>
-                      </button>
-                    </div>
                   </div>
                 </div>
 
@@ -2091,24 +2067,6 @@ export const AgriVisionApp: React.FC<AgriVisionAppProps> = ({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <button
-                onClick={() => exportAgriVisionPDFReport({ analysis: analysisResult, selectedSite, selectedVoice, selectedLang })}
-                className="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer"
-                title="Download PDF audit report with live project URL"
-              >
-                <FileText className="w-4 h-4" />
-                <span>PDF Audit Report</span>
-              </button>
-
-              <button
-                onClick={() => exportAgriVisionDocxReport({ analysis: analysisResult, selectedSite, selectedVoice, selectedLang })}
-                className="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all cursor-pointer"
-                title="Download Microsoft Word (.docx) report with live project URL"
-              >
-                <FileCheck className="w-4 h-4" />
-                <span>Word (.docx) Report</span>
-              </button>
-
               <button
                 onClick={() => {
                   const csvData = scanLogs.map((l) => `${l.id},${l.cropName},${l.diseaseName},${l.severity},${l.confidence}%,${l.location}`).join("\n");
