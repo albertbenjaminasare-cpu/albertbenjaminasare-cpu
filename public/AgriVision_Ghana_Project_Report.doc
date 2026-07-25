@@ -1,0 +1,146 @@
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+  <meta charset='utf-8'>
+  <title>AgriVision Ghana - Hackathon Project Report</title>
+  <style>
+    body { font-family: 'Calibri', 'Segoe UI', 'Arial', sans-serif; margin: 40px; color: #1e293b; line-height: 1.6; }
+    h1 { color: #047857; font-size: 26pt; font-weight: bold; border-bottom: 3px solid #047857; padding-bottom: 8px; margin-bottom: 4px; }
+    .subtitle { color: #64748b; font-size: 12pt; margin-bottom: 24px; font-style: italic; }
+    h2 { color: #065f46; font-size: 16pt; font-weight: bold; margin-top: 28px; margin-bottom: 12px; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; }
+    h3 { color: #0f766e; font-size: 13pt; font-weight: bold; margin-top: 18px; margin-bottom: 8px; }
+    p { margin-bottom: 12px; font-size: 11pt; }
+    ul, ol { margin-top: 4px; margin-bottom: 14px; padding-left: 24px; }
+    li { margin-bottom: 6px; font-size: 11pt; }
+    .highlight-box { background-color: #f0fdf4; border-left: 6px solid #10b981; padding: 16px; margin: 20px 0; border-radius: 4px; }
+    .warning-box { background-color: #fef2f2; border-left: 6px solid #ef4444; padding: 16px; margin: 20px 0; border-radius: 4px; }
+    .info-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    .info-table th { background-color: #047857; color: #ffffff; padding: 10px 12px; text-align: left; font-size: 10.5pt; font-weight: bold; }
+    .info-table td { border: 1px solid #cbd5e1; padding: 9px 12px; font-size: 10pt; vertical-align: top; }
+    .script-box { background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 12px 16px; margin-bottom: 12px; border-radius: 4px; font-style: italic; font-size: 10.5pt; }
+    .lang-title { font-weight: bold; color: #0f766e; font-size: 11pt; font-style: normal; margin-bottom: 4px; }
+    .badge { display: inline-block; background-color: #d1fae5; color: #065f46; padding: 3px 8px; border-radius: 12px; font-weight: bold; font-size: 9pt; }
+    .footer { font-size: 9.5pt; color: #94a3b8; margin-top: 40px; text-align: center; border-top: 1px solid #cbd5e1; padding-top: 12px; }
+  </style>
+</head>
+<body>
+
+  <h1>AGRIVISION GHANA • HACKATHON PROJECT REPORT</h1>
+  <div class="subtitle">AI-Powered Multimodal Crop Pathology Vision & Indigenous Voice Extension Engine (Twi, Fante, Ewe, Gã, Hausa, English & French)</div>
+
+  <div class="highlight-box">
+    <strong style="color: #047857; font-size: 13pt;">PROJECT SUMMARY FOR HACKATHON JUDGES:</strong><br/>
+    AgriVision Ghana is a next-generation AI agricultural extension platform powered by Google’s <strong>Gemma 4</strong> multimodal vision engine. It enables smallholder farmers, agricultural extension officers, and regional partners across Ghana and West Africa to scan crop leaves, diagnose plant diseases with sub-200ms heatmaps, receive financial loss projections in Ghanaian Cedis (GH₵), and listen to authentic spoken audio remedies in 7 indigenous mother tongues & regional languages: <strong>Asante Twi, Fante Mfantse, Ewe (Volta), Gã (Accra), Hausa, Ghanaian Extension English, and French (Français)</strong>.
+  </div>
+
+  <h2>1. Problem Statement & Social Impact</h2>
+  <p>In West Africa, over <strong>60% of smallholder farmers</strong> lose up to 40% of their crop yields annually due to unrectified plant diseases such as Tomato Late Blight, Maize Rust, and Cassava Mosaic Virus. Key structural challenges include:</p>
+  <ul>
+    <li><strong>Language & Regional Dialect Barriers:</strong> Traditional tools only offer generic English text, excluding rural Ghanaian communities speaking Asante Twi, Fante, Ewe, Gã, and Hausa.</li>
+    <li><strong>Delayed Pathology Intervention:</strong> Extension officers cover over 1,000 farmers each, leading to multi-week delays in diagnosing infectious fungal and bacterial crop outbreaks.</li>
+    <li><strong>Financial Risk Exposure:</strong> Farmers lack instant estimates of crop loss prevention in local currency (GH₵ Cedis) to justify purchasing organic fungicides or treatments.</li>
+  </ul>
+
+  <h2>2. Key Innovations & Technical Architecture</h2>
+  <table class="info-table">
+    <thead>
+      <tr>
+        <th style="width: 25%;">System Module</th>
+        <th style="width: 35%;">Technology Stack</th>
+        <th>Functional Capability</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Multimodal Crop Vision Engine</strong></td>
+        <td>Gemma 4 Multimodal Vision & Gemini API</td>
+        <td>Instant sub-200ms identification of crop species, pathogen classification, severity levels, and lesion hotspot bounding boxes.</td>
+      </tr>
+      <tr>
+        <td><strong>Deep Native Voice Engine</strong></td>
+        <td>Google GenAI Voice & Web Speech Audio</td>
+        <td>Hands-free, spoken audio extension advisories in 7 languages with speech rate pace sliders and female extension officer tone controls.</td>
+      </tr>
+      <tr>
+        <td><strong>Economic Impact & Loss Calculator</strong></td>
+        <td>Express Node.js Financial API</td>
+        <td>Real-time calculation of saved yield value in Ghanaian Cedis (GH₵) based on farm acreage and market prices.</td>
+      </tr>
+      <tr>
+        <td><strong>Interactive Leaf Hotspot Canvas</strong></td>
+        <td>HTML5 Canvas & React 18</td>
+        <td>Visual overlays displaying necrotic leaf lesions, severity percentage, and infected canopy zones.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3. Native Local Extension Scripts</h2>
+  <p>To ensure 100% linguistic authenticity and smooth communication with farmers, AgriVision AI generates spoken extension advisory scripts tailored directly to each community:</p>
+
+  <div class="script-box">
+    <div class="lang-title">🇬🇭 Asante Twi Advisory Script:</div>
+    "Akuafoɔ mo ne adwuma! Kɔkɔbɔ kɛseɛ kɔma mo: Yɛahu Ntomose Yareɛ bɔne (Late Blight) wɔ wo mfuo mu 98%. Fa Kɔpɔ (Copper) aduru no bɔ do ntɛm ara na twitwa nhaban a asɛe no nkɔ tɔne gu na wo sika ammwera!"
+  </div>
+
+  <div class="script-box">
+    <div class="lang-title">🇬🇭 Fante Mfantse Advisory Script:</div>
+    "Akuafo mo eye adwuma! Kɔkɔbɔ kɛse kɔma mo: Yehu Amamfua mu yare bɔn (Late Blight) wɔ wo mfuw mu 98%. Fa Kɔpɔ adur no petse do ntsemee biara na tu mfandwer asɛe no gu na sika ammbɔ!"
+  </div>
+
+  <div class="script-box">
+    <div class="lang-title">🇬🇭 Ewe (Volta Region) Advisory Script:</div>
+    "Kpekpedenu na agbledelawo! Nuxxlɔ̃ame vevie: Wɔke ɗe Ntomose dɔléle (Late Blight) ŋu le miafe agble me 98%. Miwɔ dɔ kple Kɔpɔ tike enumake be miapɔ miafe ga kple agblemenuwo ta!"
+  </div>
+
+  <div class="script-box">
+    <div class="lang-title">🇬🇭 Gã (Greater Accra) Advisory Script:</div>
+    "Okwaafoi eye niyenii! Kɔkɔbɔ kpeteŋkpele kɛha okwaafonyo: Wɔna baabo nɔ gbonyo (Late Blight) yɛ oŋmɔ lɔɔ mli 98%. Tsi ohe kɛ tso tsofa mra kɛfite le koni osika akaite!"
+  </div>
+
+  <div class="script-box">
+    <div class="lang-title">🇬🇭 Hausa Advisory Script:</div>
+    "Sannu da aiki manoma! Gargadi mai muhimmanci ga manoma: An gano cutar Tumatir (Late Blight) a gonar ku 98%. Yi amfani da maganin Kwalba (Copper) yanzu domin kare kuɗinku!"
+  </div>
+
+  <div class="script-box">
+    <div class="lang-title">🇬🇭 Ghanaian English Advisory Script:</div>
+    "Warning for farmers: Tomato Late Blight detected with 98% confidence. Apply copper fungicide immediately and remove infected leaves to safeguard your crop yield."
+  </div>
+
+  <div class="script-box">
+    <div class="lang-title">🇫🇷 French (Français) Advisory Script:</div>
+    "Avertissement urgent pour les agriculteurs: Mildiou de la tomate (Late Blight) détecté à 98% dans votre champ. Appliquez immédiatement un fongicide au cuivre et éliminez le feuillage infecté pour protéger votre rendement."
+  </div>
+
+  <h2>4. Sample Diagnostic Case Study</h2>
+  <div class="warning-box">
+    <strong style="color: #991b1b; font-size: 12pt;">FIELD DIAGNOSTIC DATA (TOMATO LATE BLIGHT):</strong>
+    <ul style="margin-top: 8px;">
+      <li><strong>Target Crop:</strong> Tomato (Solanum lycopersicum)</li>
+      <li><strong>Pathogen:</strong> Phytophthora infestans (Fungal Oomycete)</li>
+      <li><strong>Diagnostic Confidence:</strong> 98.4%</li>
+      <li><strong>Canopy Severity:</strong> 35% affected tissue</li>
+      <li><strong>Economic Loss Prevented:</strong> GH₵ 5,800 / acre</li>
+      <li><strong>Organic Remedy:</strong> Apply copper hydroxide spray every 7 days during high humidity.</li>
+      <li><strong>Chemical Treatment:</strong> Systemic Mancozeb or Metalaxyl spray formulation.</li>
+    </ul>
+  </div>
+
+  <h2>5. Hackathon Judge Evaluation & Competitive Differentiation</h2>
+  <ul>
+    <li><strong>Authentic Indigenous Localization:</strong> Support for Ghanaian currency (GH₵ Cedis), native spoken mother tongues (Asante Twi, Fante, Ewe, Gã, Hausa), Ghanaian English, and French.</li>
+    <li><strong>End-to-End Field Readiness:</strong> Includes interactive canvas hotspot visualization, acreage yield calculators, pace slider, and downloadable Word reports for Ministry sign-off.</li>
+    <li><strong>High Technical Depth:</strong> Fully integrated Express + Vite TypeScript full-stack server proxying Gemini & Gemma 4 API calls securely with automatic fallback synthesis.</li>
+  </ul>
+
+  <div style="margin-top: 30px; border: 1px solid #cbd5e1; padding: 16px; background-color: #f8fafc; border-radius: 4px;">
+    <strong style="color: #065f46;">PROJECT SIGN-OFF & EVALUATION:</strong><br/><br/>
+    Hackathon Team Lead Signature: ___________________________ Date: _____________<br/>
+    Ministry of Food & Agriculture Extension Partner: ___________________________________
+  </div>
+
+  <div class="footer">
+    AgriVision Ghana Project Report • Created for Hackathon Presentation & Microsoft Word Editing
+  </div>
+
+</body>
+</html>

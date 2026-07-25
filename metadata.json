@@ -1,0 +1,6 @@
+{
+  "name": "AgriVision AI - Smart Crop Health & Disease Scanner",
+  "description": "An AI-powered agricultural vision system using Gemma 4 multimodal reasoning to diagnose leaf diseases, calculate crop loss risks, generate multilingual audio remedies, and simulate micro-climate outbreak forecasts.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
